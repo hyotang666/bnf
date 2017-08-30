@@ -22,6 +22,11 @@
 ,:test (lambda(example $result)
 	 (declare(ignore example))
 	 (& (listp $result)
+	    (= (length $result)
+	       #.(* 3 ; sign?
+		    1 ; digit+
+		    2) ; dot?
+	       )
 	    (every #'stringp $result)
 	    (every (lambda(elt)
 		     (integerp(read-from-string elt)))
@@ -131,6 +136,12 @@
 ,:test (lambda(e.g. result)
 	 (declare(ignore e.g.))
 	 (& (listp result)
+	    (= (length result)
+	       #.(* 3 ; sign
+		    1 ; digits
+		    1 ; #\/
+		    1 ; digits
+		    ))
 	    (every #'stringp result)
 	    (every (lambda(elt)
 		     (rationalp(read-from-string elt)))
@@ -147,6 +158,26 @@
 
 :satisfies #`(& (listp $result)
 		(every #'stringp $result)
+		(= (length $result)
+		   #.(+ (* 3 ; sign?
+			   2 ; digit*
+			   1 ; #\.
+			   1 ; digit+
+			   (+ 1 ; ""
+			      (* 10 ; marker
+				 3 ; sign?
+				 1 ; digit+
+				 )))
+			(* 3 ; sign?
+			   1 ; digit+
+			   (+ 1 ; ""
+			      (* 1 ; #\.
+				 2 ; digit*
+				 ))
+			   (* 10 ; marker
+			      3 ; sign?
+			      1 ; digit+
+			      ))))
 		(every (lambda(elt)
 			 (floatp(read-from-string elt)))
 		       $result))
