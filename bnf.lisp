@@ -1,6 +1,6 @@
 (defpackage #:bnf
   (:use #:endaira)
-  (:export #:bnf))
+  (:export #:examples))
 (in-package #:bnf)
 
 ;;; Original bnf notation example.
@@ -34,13 +34,13 @@ dot := [ #\. | "" ]
   (mapcar #'strcat (combinate (integer))))
 
 #+design-of-syntax
-(bnf (integer (sign digits dot))
-     (sign (or "" #\+ #\-))
-     (digits (or digit (digit digits)) :max 3)
-     (digit (or . #.(coerce "1234567890" 'list)))
-     (dot (or "" #\.)))
+(examples (integer (sign digits dot))
+	  (sign (or "" #\+ #\-))
+	  (digits (or digit (digit digits)) :max 3)
+	  (digit (or . #.(coerce "1234567890" 'list)))
+	  (dot (or "" #\.)))
 
-(defmacro bnf(&rest clause*)
+(defmacro examples(&rest clause*)
   (case (length clause*)
     (0 nil)
     (1 `(LABELS,(mapcar #'bnf-clause clause*)
@@ -122,16 +122,16 @@ dot := [ #\. | "" ]
 	:finally (return(uiop:reduce/strcat result))))
 
 #+design-of-syntax
-(bnf (integer (sign digits dot))
-     (sign (or "" #\+ #\-))
-     (digits (or digit (digit digits)) :max 3)
-     (digit (or . #.(coerce "1234567890" 'list)))
-     (dot (or "" #\.)))
+(examples (integer (sign digits dot))
+	  (sign (or "" #\+ #\-))
+	  (digits (or digit (digit digits)) :max 3)
+	  (digit (or . #.(coerce "1234567890" 'list)))
+	  (dot (or "" #\.)))
 
 #+design-of-syntax
-(bnf (ratio (sign digits #\/ digits))
-     (sign (or "" "+" "-"))
-     (digit (or . #.(coerce "1234567890" 'list)))
-     (digits (or digit (digit digits))
-	     :max 3))
+(examples (ratio (sign digits #\/ digits))
+	  (sign (or "" "+" "-"))
+	  (digit (or . #.(coerce "1234567890" 'list)))
+	  (digits (or digit (digit digits))
+		  :max 3))
 
