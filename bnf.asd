@@ -2,7 +2,7 @@
 (in-package :asdf)
 (defsystem "bnf"
   :depends-on
-  ("endaira")
+  ("endaira" "trestrul")
   :components
   ((:file "bnf")))
 

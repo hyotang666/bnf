@@ -50,9 +50,12 @@ dot := [ #\. | "" ]
 									     (,(caar clause*))))))))
     (otherwise `(LABELS,(mapcar #'bnf-clause clause*)
 		  (LET((LIST(,(caar clause*))))
-		    (IF(EQ :EXAMPLES (CAR LIST))
-		      (CDR LIST)
-		     LIST))))))
+		    (TYPECASE LIST
+		      ((CONS (EQL :EXAMPLES)T)
+		       (CDR LIST))
+		      ((CONS FUNCTION NULL)
+		       (LIST(STRING(FUNCALL (CAR LIST)))))
+		      (OTHERWISE LIST)))))))
 
 (defun bnf-clause(clause)
   (destructuring-bind(var form &key max)clause
@@ -76,10 +79,13 @@ dot := [ #\. | "" ]
 	      ((cons(eql or)t)(or-form form))
 	      (otherwise `(uiop:strcat ,@(mapcar #'parse form)))))
 	  (or-form(form)
-	    `(FUNCALL(AREF (VECTOR ,@(mapcar (lambda(elt)
-					       `(LAMBDA(),(parse elt)))
-					     (cdr form)))
-			   (RANDOM ,(length (cdr form)))))))
+	    (let((form `(FUNCALL(AREF (VECTOR ,@(mapcar (lambda(elt)
+							  `(LAMBDA(),(parse elt)))
+							(cdr form)))
+				      (RANDOM ,(length (cdr form)))))))
+	      (if(trestrul:find-leaf var form)
+		form
+		`(UIOP:STRCAT ,form (,var (1- MAX)))))))
     (if(typep form '(cons (eql or)t))
       (or-form form)
       `(uiop:strcat ,(parse form)(,var(1- max))))))
@@ -101,7 +107,9 @@ dot := [ #\. | "" ]
 	:else :collect elt))
 
 (defun sample(list)
-  (aref(coerce list 'vector)(random (length list))))
+  (if(listp list)
+    (aref(coerce list 'vector)(random (length list)))
+    list))
 
 (defun combinate(forms)
   (mapcan (lambda(elt)

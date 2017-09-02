@@ -107,6 +107,23 @@
 :satisfies #`(find $result '(("+")("-")("++")("+-")("--")("-+"))
 		   :test #'equal)
 
+#?(examples (zeros (or #\0 (#\0 zeros))
+		   :max 3))
+:satisfies #`(find $result '(("0")("00")("000"))
+		   :test #'equal)
+
+; Case name.
+#?(examples (zeros zero :max 3)
+	    (zero #\0))
+:satisfies #`(find $result '(("0")("00")("000"))
+		   :test #'equal)
+
+#?(examples (zeros (or zero (zero zeros))
+		   :max 3)
+	    (zero #\0))
+:satisfies #`(find $result '(("0")("00")("000"))
+		   :test #'equal)
+
 ; result := list
 
 ;;;; Affected By:
@@ -152,7 +169,7 @@
 	    (sign? (or "" #\+ #\-))
 	    (digit* (or "" digit+))
 	    (digit+ (or . #.(coerce "1234567890" 'list))
-		    :max 2)
+		    :max 1)
 	    (exponent (marker sign? digit+))
 	    (marker (or . #.(coerce "DEFLSdefls" 'list))))
 
