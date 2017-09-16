@@ -1,6 +1,5 @@
 (defpackage :bnf.spec
   (:import-from :bnf #:combinate #:strcat #:canonicalize)
-  (:shadowing-import-from :endaira #:labels)
   (:use :cl :jingoh #:bnf))
 (in-package :bnf.spec)
 (setup :bnf)

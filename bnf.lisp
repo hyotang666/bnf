@@ -1,5 +1,5 @@
 (defpackage #:bnf
-  (:use #:endaira)
+  (:use #:cl)
   (:export #:examples))
 (in-package #:bnf)
 
