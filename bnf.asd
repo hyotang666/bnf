@@ -6,6 +6,5 @@
   :components
   ((:file "bnf")))
 
-;; Perform method below is added by JINGOH.GENERATOR.
-(defmethod perform ((o test-op) (c (eql (find-system "bnf"))))
-  (test-system :bnf.test))
+(defmethod component-depends-on ((o test-op) (c (eql (find-system "bnf"))))
+  (append (call-next-method)'((test-op "bnf.test"))))
