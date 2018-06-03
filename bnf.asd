@@ -2,7 +2,9 @@
 (in-package :asdf)
 (defsystem "bnf"
   :depends-on
-  ("trestrul")
+  (
+   "trestrul" ; Utilities for tree structured list.
+   )
   :components
   ((:file "bnf")))
 
