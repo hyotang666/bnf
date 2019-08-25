@@ -83,45 +83,52 @@
 
 ; Case literal character.
 #?(examples(alpha #\a :max 4))
-:satisfies #`(find $result '(("a")("aa")("aaa")("aaaa")):test #'equal)
+:satisfies (lambda($result)
+	     (find $result '(("a")("aa")("aaa")("aaaa")):test #'equal))
 
 ; Case literal string.
 #?(examples(my-name "sato" :max 4))
-:satisfies #`(find $result '(("sato")
+:satisfies (lambda($result)
+	     (find $result '(("sato")
 			     ("satosato")
 			     ("satosatosato")
 			     ("satosatosatosato"))
-		   :test #'equal)
+		   :test #'equal))
 
 ; Case group.
 #?(examples(http (#\h "tt" #\p) :max 4))
-:satisfies #`(find $result '(("http")
+:satisfies (lambda($result)
+	     (find $result '(("http")
 			     ("httphttp")
 			     ("httphttphttp")
 			     ("httphttphttphttp"))
-		   :test #'equal)
+		   :test #'equal))
 
 ; Case choices.
 #?(examples(sign2 (or #\+ #\-) :max 2))
-:satisfies #`(find $result '(("+")("-")("++")("+-")("--")("-+"))
-		   :test #'equal)
+:satisfies (lambda($result)
+	     (find $result '(("+")("-")("++")("+-")("--")("-+"))
+		   :test #'equal))
 
 #?(examples (zeros (or #\0 (#\0 zeros))
 		   :max 3))
-:satisfies #`(find $result '(("0")("00")("000"))
-		   :test #'equal)
+:satisfies (lambda($result)
+	     (find $result '(("0")("00")("000"))
+		   :test #'equal))
 
 ; Case name.
 #?(examples (zeros zero :max 3)
 	    (zero #\0))
-:satisfies #`(find $result '(("0")("00")("000"))
-		   :test #'equal)
+:satisfies (lambda($result)
+	     (find $result '(("0")("00")("000"))
+		   :test #'equal))
 
 #?(examples (zeros (or zero (zero zeros))
 		   :max 3)
 	    (zero #\0))
-:satisfies #`(find $result '(("0")("00")("000"))
-		   :test #'equal)
+:satisfies (lambda($result)
+	     (find $result '(("0")("00")("000"))
+		   :test #'equal))
 
 ; result := list
 
@@ -172,7 +179,8 @@
 	    (exponent (marker sign? digit+))
 	    (marker (or . #.(coerce "DEFLSdefls" 'list))))
 
-:satisfies #`(& (listp $result)
+:satisfies (lambda($result)
+	     (& (listp $result)
 		(every #'stringp $result)
 		(= (length $result)
 		   #.(+ (* 3 ; sign?
@@ -196,4 +204,4 @@
 			      ))))
 		(every (lambda(elt)
 			 (floatp(read-from-string elt)))
-		       $result))
+		       $result)))
