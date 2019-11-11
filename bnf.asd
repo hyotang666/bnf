@@ -2,6 +2,9 @@
 (in-package :asdf)
 (defsystem "bnf"
   :version "0.0.0"
+  :author "SATO Shinichi"
+  :license "MIT"
+  :description "BNF example generator. Useful for testing parser."
   :depends-on
   (
    "trestrul" ; Utilities for tree structured list.
