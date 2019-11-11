@@ -1,6 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem "bnf"
+  :version "0.0.0"
   :depends-on
   (
    "trestrul" ; Utilities for tree structured list.

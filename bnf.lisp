@@ -42,20 +42,26 @@ dot := [ #\. | "" ]
 
 (defmacro examples(&rest clause*)
   (case (length clause*)
-    (0 nil)
-    (1 `(LABELS,(mapcar #'bnf-clause clause*)
-	  (MAPCAR #'STRCAT (COMBINATE(MAPCAR #'UIOP:ENSURE-LIST(CANONICALIZE ,(if(typep (car clause*) '(CONS (EQL OR) T))
-										T
-										NIL)
-									     (,(caar clause*))))))))
-    (otherwise `(LABELS,(mapcar #'bnf-clause clause*)
-		  (LET((LIST(,(caar clause*))))
-		    (TYPECASE LIST
-		      ((CONS (EQL :EXAMPLES)T)
-		       (CDR LIST))
-		      ((CONS FUNCTION NULL)
-		       (LIST(STRING(FUNCALL (CAR LIST)))))
-		      (OTHERWISE LIST)))))))
+    (0
+     nil)
+    (1
+     `(LABELS,(mapcar #'bnf-clause clause*)
+	(MAPCAR #'STRCAT
+		(COMBINATE(MAPCAR #'UIOP:ENSURE-LIST
+				  (CANONICALIZE ,(if(typep (car clause*)
+							   '(CONS (EQL OR) T))
+						   T
+						   NIL)
+						(,(caar clause*))))))))
+    (otherwise
+      `(LABELS,(mapcar #'bnf-clause clause*)
+	 (LET((LIST(,(caar clause*))))
+	   (TYPECASE LIST
+		     ((CONS (EQL :EXAMPLES)T)
+		      (CDR LIST))
+		     ((CONS FUNCTION NULL)
+		      (LIST(STRING(FUNCALL (CAR LIST)))))
+		     (OTHERWISE LIST)))))))
 
 (defun bnf-clause(clause)
   (destructuring-bind(var form &key max)clause
@@ -92,11 +98,17 @@ dot := [ #\. | "" ]
 
 (defun bnf-parse(form)
   (typecase form
-    ((or character string)form) ; <--- literal data.
-    (symbol`(,form)) ; <--- function call.
+    ((or character string)
+     form) ; <--- literal data.
+    (symbol
+      `(,form)) ; <--- function call.
     ((cons(eql or)T)
      `(CANONICALIZE T ,@(mapcar #'bnf-parse (cdr form))))
-    (otherwise `(CONS :EXAMPLES(MAPCAR #'STRCAT (COMBINATE(MAPCAR #'UIOP:ENSURE-LIST(CANONICALIZE NIL ,@(mapcar #'bnf-parse form)))))))))
+    (otherwise
+      `(CONS :EXAMPLES
+	     (MAPCAR #'STRCAT
+		     (COMBINATE(MAPCAR #'UIOP:ENSURE-LIST
+				       (CANONICALIZE NIL ,@(mapcar #'bnf-parse form)))))))))
 
 (defun canonicalize(orp &rest elt*)
   (loop :for elt :in elt*
