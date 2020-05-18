@@ -27,9 +27,10 @@ MIT
 ### Developed with
 SBCL
 ### Tested with
-* SBCL/1.5.6
-* CCL/1.11.5
-* ECL/16.1.3
+* SBCL/2.0.2
+* CCL/1.12
+* ECL/20.4.24
+* CLISP/2.49
 
 ## Installation
 
