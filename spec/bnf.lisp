@@ -14,12 +14,12 @@
 
 #?(examples (integer (sign? digit+ dot?))
 	    (sign? (or "" #\+ #\-))
-	    (digit+ (or digit (digit digit+)):max 3)
+	    (digit+ (or digit (digit digit+)) :max 3)
 	    (digit (or . #.(coerce "1234567890" 'list)))
 	    (dot? (or "" #\.)))
 => ("4" "1." "+138" "+458." "-6" "-101.")
-,:test (lambda(example $result)
-	 (declare(ignore example))
+,:test (lambda (example $result)
+	 (declare (ignore example))
 	 (& (listp $result)
 	    (= (length $result)
 	       #.(* 3 ; sign?
@@ -27,7 +27,7 @@
 		    2) ; dot?
 	       )
 	    (every #'stringp $result)
-	    (every (lambda(elt)
+	    (every (lambda (elt)
 		     (integerp(read-from-string elt)))
 		   $result)))
 
@@ -83,12 +83,12 @@
 
 ; Case literal character.
 #?(examples(alpha #\a :max 4))
-:satisfies (lambda($result)
-	     (find $result '(("a")("aa")("aaa")("aaaa")):test #'equal))
+:satisfies (lambda ($result)
+	     (find $result '(("a")("aa")("aaa")("aaaa")) :test #'equal))
 
 ; Case literal string.
 #?(examples(my-name "sato" :max 4))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("sato")
 			     ("satosato")
 			     ("satosatosato")
@@ -97,7 +97,7 @@
 
 ; Case group.
 #?(examples(http (#\h "tt" #\p) :max 4))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("http")
 			     ("httphttp")
 			     ("httphttphttp")
@@ -106,27 +106,27 @@
 
 ; Case choices.
 #?(examples(sign2 (or #\+ #\-) :max 2))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("+")("-")("++")("+-")("--")("-+"))
 		   :test #'equal))
 
 #?(examples (zeros (or #\0 (#\0 zeros))
 		   :max 3))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("0")("00")("000"))
 		   :test #'equal))
 
 ; Case name.
 #?(examples (zeros zero :max 3)
 	    (zero #\0))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("0")("00")("000"))
 		   :test #'equal))
 
 #?(examples (zeros (or zero (zero zeros))
 		   :max 3)
 	    (zero #\0))
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (find $result '(("0")("00")("000"))
 		   :test #'equal))
 
@@ -156,8 +156,8 @@
 	    (digits (or digit (digit digits))
 		    :max 3))
 => #|e.g.|# ("58/35" "+3/3" "-2/2")
-,:test (lambda(e.g. result)
-	 (declare(ignore e.g.))
+,:test (lambda (e.g. result)
+	 (declare (ignore e.g.))
 	 (& (listp result)
 	    (= (length result)
 	       #.(* 3 ; sign
@@ -166,8 +166,8 @@
 		    1 ; digits
 		    ))
 	    (every #'stringp result)
-	    (every (lambda(elt)
-		     (rationalp(read-from-string elt)))
+	    (every (lambda (elt)
+		     (rationalp (read-from-string elt)))
 		   result)))
 
 #?(examples (float. (or (sign? digit* #\. digit+ (or "" exponent))
@@ -179,7 +179,7 @@
 	    (exponent (marker sign? digit+))
 	    (marker (or . #.(coerce "DEFLSdefls" 'list))))
 
-:satisfies (lambda($result)
+:satisfies (lambda ($result)
 	     (& (listp $result)
 		(every #'stringp $result)
 		(= (length $result)
@@ -202,6 +202,6 @@
 			      3 ; sign?
 			      1 ; digit+
 			      ))))
-		(every (lambda(elt)
-			 (floatp(read-from-string elt)))
+		(every (lambda (elt)
+			 (floatp (read-from-string elt)))
 		       $result)))
