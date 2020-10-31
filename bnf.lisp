@@ -48,7 +48,7 @@ dot := [ #\. | "" ]
   (case (length clause*)
     (0 nil)
     (1
-     `(labels ,(mapcar #'bnf-clause clause*)
+     `(labels ,(mapcar #'<labels-def> clause*)
         (mapcar #'strcat
                 (combinate
                   (mapcar #'uiop:ensure-list
@@ -58,14 +58,14 @@ dot := [ #\. | "" ]
                                  nil)
                             (,(caar clause*))))))))
     (otherwise
-     `(labels ,(mapcar #'bnf-clause clause*)
+     `(labels ,(mapcar #'<labels-def> clause*)
         (let ((list (,(caar clause*))))
           (typecase list
             ((cons (eql :examples) t) (cdr list))
             ((cons function null) (list (string (funcall (car list)))))
             (otherwise list)))))))
 
-(defun bnf-clause (clause)
+(defun <labels-def> (clause)
   (destructuring-bind
       (var form &key max)
       clause
@@ -74,15 +74,15 @@ dot := [ #\. | "" ]
           (labels ((,var (&optional (max (1+ (random ,max))))
                      (if (<= max 0)
                          ""
-                         ,(labels-parse form var))))
+                         ,(<with-max-form> form var))))
             (list #',var)))
         `(,var nil
           (return-from ; <--- In order to return string. Otherwise treated as
                        ; docstring.
             ,var
-            ,(bnf-parse form))))))
+            ,(<simple-def-form> form))))))
 
-(defun labels-parse (form var)
+(defun <with-max-form> (form var)
   (labels ((parse (form)
              (typecase form
                ((or character string) form)
@@ -107,19 +107,20 @@ dot := [ #\. | "" ]
         (or-form form)
         `(uiop:strcat ,(parse form) (,var (1- max))))))
 
-(defun bnf-parse (form)
+(defun <simple-def-form> (form)
   (typecase form
     ((or character string) form) ; <--- literal data.
     (symbol `(,form)) ; <--- function call.
-    ((cons (eql or) t) `(canonicalize t ,@(mapcar #'bnf-parse (cdr form))))
+    ((cons (eql or) t)
+     `(canonicalize t ,@(mapcar #'<simple-def-form> (cdr form))))
     (otherwise
-     `(cons
-       :examples (mapcar #'strcat
-                         (combinate
-                           (mapcar #'uiop:ensure-list
-                                   (canonicalize nil
-                                                 ,@(mapcar #'bnf-parse
-                                                           form)))))))))
+     `(cons :examples (mapcar #'strcat
+                              (combinate
+                                (mapcar #'uiop:ensure-list
+                                        (canonicalize nil
+                                                      ,@(mapcar
+                                                          #'<simple-def-form>
+                                                          form)))))))))
 
 (defun canonicalize (orp &rest elt*)
   (loop :for elt :in elt*
@@ -149,7 +150,8 @@ dot := [ #\. | "" ]
         :collect (typecase elt
                    (function (funcall elt))
                    (list (strcat elt))
-                   (otherwise elt)) :into result
+                   (otherwise elt))
+          :into result
         :finally (return (uiop:reduce/strcat result))))
 
 #+design-of-syntax
