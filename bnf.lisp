@@ -13,6 +13,9 @@ digit := [ #\1 | #\2 | #\3 | #\4 | #\5 | #\6 | #\7 | #\8 | #\9 | #\0 ]
 dot := [ #\. | "" ]
 |#
 
+(defun generate-digit-char ()
+  (char "0123456789abcdefghijklmnopqrstuvwxyz" (random *read-base*)))
+
 #+design
 (labels ((integer ()
            (list (sign) (digits) (dot)))
@@ -31,7 +34,7 @@ dot := [ #\. | "" ]
                               (random 2))))))
              (list #'digits)))
          (digit ()
-           '#.(coerce "1234567890" 'list))
+           (generate-digit-char))
          (dot ()
            '("" #\.)))
   (mapcar #'strcat (combinate (integer))))
@@ -41,7 +44,7 @@ dot := [ #\. | "" ]
   (integer (sign digits dot))
   (sign (or "" #\+ #\-))
   (digits (or digit (digit digits)) :max 3)
-  (digit (or . #.(coerce "1234567890" 'list)))
+  (digit #'generate-digit-char)
   (dot (or "" #\.)))
 
 (defmacro examples (&body clause*)
@@ -113,6 +116,7 @@ dot := [ #\. | "" ]
     (symbol `(,form)) ; <--- function call.
     ((cons (eql or) t)
      `(canonicalize t ,@(mapcar #'<simple-def-form> (cdr form))))
+    ((cons (eql function)) `(list ,(cdr form)))
     (otherwise
      `(cons :examples (mapcar #'strcat
                               (combinate

@@ -1,7 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem "bnf"
-  :version "0.0.3"
+  :version "0.1.0"
   :author "SATO Shinichi"
   :license "MIT"
   :description "BNF example generator. Useful for testing parser."
