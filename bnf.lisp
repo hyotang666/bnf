@@ -56,9 +56,7 @@ dot := [ #\. | "" ]
                 (combinate
                   (mapcar #'uiop:ensure-list
                           (canonicalize
-                            ,(if (typep (car clause*) '(cons (eql or) t))
-                                 t
-                                 nil)
+                            ,(typep (car clause*) '(cons (eql or) t))
                             (,(caar clause*))))))))
     (otherwise
      `(labels ,(mapcar #'<labels-def> clause*)
