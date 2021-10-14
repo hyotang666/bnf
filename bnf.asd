@@ -9,7 +9,8 @@
   :description "BNF example generator. Useful for testing parser."
   :depends-on
   (
-   "trestrul" ; Utilities for tree structured list.
+   "uiop"       ; Utilities implicily depends on via asdf.
+   "trestrul"   ; Utilities for tree structured list.
    )
   :components
   ((:file "bnf")))
