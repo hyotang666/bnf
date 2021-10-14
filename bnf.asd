@@ -4,6 +4,8 @@
   :version "0.1.1"
   :author "SATO Shinichi"
   :license "MIT"
+  :source-control (:git "git@github.com:hyotang666/bnf")
+  :bug-tracker "https://github.com/hyotang666/bnf/issues"
   :description "BNF example generator. Useful for testing parser."
   :depends-on
   (
