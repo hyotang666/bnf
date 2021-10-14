@@ -1,12 +1,17 @@
 # bnf 0.0.0
-## What is this?
 BNF example generator.
-### Current lisp world
-There is no such library.
-### Issues
-It is hard to test parser.
-### Proposal
-BNF provide such feature.
+
+## Altenatives and differences
+
+|          | [cl-string-generator] | [cl-gimei]               | bnf                |
+| -------- | --------------------- | ------------------------ | ------------------ |
+| generate | any string            | japanese name and adress | any string         |
+| via      | regular expression    |                          | bnf                |
+| return   | one shot value        | one shot value           | comprehensive list |
+
+[cl-string-generator]: https://github.com/pokepay/cl-string-generator
+[cl-gimei]: https://github.com/cxxxr/cl-gimei
+
 ## Usage
 
 ```lisp
@@ -27,7 +32,7 @@ MIT
 ### Developed with
 SBCL
 ### Tested with
-* SBCL/2.0.2
+* SBCL/2.1.7
 * CCL/1.12
 * ECL/20.4.24
 * CLISP/2.49
