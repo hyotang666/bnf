@@ -75,8 +75,8 @@
 => ("http")
 ,:test equal
 
-; When group is null, an error is signaled.
-#?(examples (http ())) :signals error
+; When group is null, implementation dependent condition.
+#?(examples (http ())) :signals condition
 
 ; max := non-negative-integer
 ; Specify max recursive depth.
