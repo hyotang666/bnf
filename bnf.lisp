@@ -25,13 +25,11 @@ dot := [ #\. | "" ]
            (labels ((digits (&optional (max 3))
                       (if (zerop max)
                           ""
-                          (funcall
-                            (aref
-                              (vector (lambda () (sample (digit)))
-                                      (lambda ()
-                                        (uiop:strcat (sample (digit))
-                                                     (digits (1- max)))))
-                              (random 2))))))
+                          (ecase (random 2)
+                            (0 (sample (digit)))
+                            (1
+                             (uiop:strcat (sample (digit))
+                                          (digits (1- max))))))))
              (list #'digits)))
          (digit ()
            (generate-digit-char))
@@ -95,12 +93,10 @@ dot := [ #\. | "" ]
                (otherwise `(uiop:strcat ,@(mapcar #'parse form)))))
            (or-form (form)
              (let ((form
-                    `(funcall
-                       (aref
-                         (vector
-                           ,@(mapcar (lambda (elt) `(lambda () ,(parse elt)))
-                                     (cdr form)))
-                         (random ,(length (cdr form)))))))
+                    `(ecase (random ,(length (cdr form)))
+                       ,@(loop :for i :upfrom 0
+                               :for elt :in (cdr form)
+                               :collect `(,i ,(parse elt))))))
                (if (trestrul:find-leaf var form)
                    form
                    `(uiop:strcat ,form (,var (1- max)))))))

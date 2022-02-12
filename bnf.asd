@@ -1,7 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem "bnf"
-  :version "0.1.1"
+  :version "0.1.2"
   :author "SATO Shinichi"
   :license "MIT"
   :source-control (:git "git@github.com:hyotang666/bnf")
