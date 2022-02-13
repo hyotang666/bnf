@@ -45,6 +45,20 @@ dot := [ #\. | "" ]
   (digit #'generate-digit-char)
   (dot (or "" #\.)))
 
+(defmethod documentation ((symbol (eql 'examples)) (type (eql 'function)))
+  "Generate all inclusive notation examples of specified bnf.
+  (examples { clause }*)
+  clause := (name definition &key max)
+
+    name := symbol
+
+    definition := [ name | choices | literal | group ]
+      choices := (or definition*)
+      literal := [ character | string ]
+      group := (definition+)
+
+    max := non-negative-integer")
+
 (defmacro examples (&body clause*)
   (case (length clause*)
     (0 nil)
