@@ -36,38 +36,38 @@
 ; clause := (name definition &key max)
 
 ; name := symbol, otherwise error.
-#?(examples("not-symbol" #\.)) :signals error
+#?(examples ("not-symbol" #\.)) :signals error
 
 ; It expanded to local function name internally.
-#?(examples(sign (or #\+ #\-)))
+#?(examples (sign (or #\+ #\-)))
 :expanded-to 
-(labels((sign()
+(labels ((sign ()
 	  (return-from sign (canonicalize t #\+ #\-))))
   (mapcar #'strcat (combinate (mapcar #'uiop:ensure-list (canonicalize nil (sign))))))
 
 ; TODO
 ; Unlock package.
 ; Currently violate or not is implementation dependent.
-#?(examples(float "float")) => unspecified
+#?(examples (float "float")) => unspecified
 
 ; definition := [ name | choices | literal | group ]
 
 ; choices := (or definition*)
-#?(examples(sign (or #\+ #\-)))
+#?(examples (sign (or #\+ #\-)))
 => ("+" "-")
 ,:test equal
 
-#?(examples(empty(or))) => NIL
+#?(examples (empty (or))) => NIL
 
 #?(examples (works? (empty empty))
 	    (empty (or)))
 => NIL
 
 ; literal := [ character | string ]
-#?(examples(alpha #\a)) => ("a")
+#?(examples (alpha #\a)) => ("a")
 ,:test equal
 
-#?(examples(my-name "sato")) => ("sato")
+#?(examples (my-name "sato")) => ("sato")
 ,:test equal
 
 ; group := (definition+)
@@ -82,12 +82,12 @@
 ; Specify max recursive depth.
 
 ; Case literal character.
-#?(examples(alpha #\a :max 4))
+#?(examples (alpha #\a :max 4))
 :satisfies (lambda ($result)
-	     (find $result '(("a")("aa")("aaa")("aaaa")) :test #'equal))
+	     (find $result '(("a") ("aa") ("aaa") ("aaaa")) :test #'equal))
 
 ; Case literal string.
-#?(examples(my-name "sato" :max 4))
+#?(examples (my-name "sato" :max 4))
 :satisfies (lambda ($result)
 	     (find $result '(("sato")
 			     ("satosato")
@@ -96,7 +96,7 @@
 		   :test #'equal))
 
 ; Case group.
-#?(examples(http (#\h "tt" #\p) :max 4))
+#?(examples (http (#\h "tt" #\p) :max 4))
 :satisfies (lambda ($result)
 	     (find $result '(("http")
 			     ("httphttp")
@@ -105,29 +105,29 @@
 		   :test #'equal))
 
 ; Case choices.
-#?(examples(sign2 (or #\+ #\-) :max 2))
+#?(examples (sign2 (or #\+ #\-) :max 2))
 :satisfies (lambda ($result)
-	     (find $result '(("+")("-")("++")("+-")("--")("-+"))
+	     (find $result '(("+") ("-") ("++") ("+-") ("--") ("-+"))
 		   :test #'equal))
 
 #?(examples (zeros (or #\0 (#\0 zeros))
 		   :max 3))
 :satisfies (lambda ($result)
-	     (find $result '(("0")("00")("000"))
+ 	     (find $result '(("0") ("00") ("000"))
 		   :test #'equal))
 
 ; Case name.
 #?(examples (zeros zero :max 3)
 	    (zero #\0))
 :satisfies (lambda ($result)
-	     (find $result '(("0")("00")("000"))
+	     (find $result '(("0") ("00") ("000"))
 		   :test #'equal))
 
 #?(examples (zeros (or zero (zero zeros))
 		   :max 3)
 	    (zero #\0))
 :satisfies (lambda ($result)
-	     (find $result '(("0")("00")("000"))
+	     (find $result '(("0") ("00") ("000"))
 		   :test #'equal))
 
 ; result := list
@@ -140,7 +140,7 @@
 
 ;;;; Notes:
 ; Could not refer any outer scope.
-#?(let((signs '(or #\+ #\-)))
+#?(let ((signs '(or #\+ #\-)))
     (examples (sign? (or "" signs))))
 :signals error
 ,:ignore-signals warning
