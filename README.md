@@ -1,16 +1,21 @@
 # bnf 0.0.0
-BNF example generator.
+BNF example generator especially for comprehensive test.
 
 ## Altenatives and differences
 
-|          | [cl-string-generator] | [cl-gimei]               | bnf                |
-| -------- | --------------------- | ------------------------ | ------------------ |
-| generate | any string            | japanese name and adress | any string         |
-| via      | regular expression    |                          | bnf                |
-| return   | one shot value        | one shot value           | comprehensive list |
+| name                  | generate              | via   | return             |
+| --------------------- | --------------------- | ----- | ------------------ |
+| [cl-string-generator] | any string            | regex | one value          |
+| [cl-gimei]            | japanese name, adress |       | one value          |
+| [lorem-ipsum]         | text for place-holder |       | one value          |
+| [chancery]            | any string            | rule  | one value          |
+| [cl-diceware]         | pass phrase           | dice  | one value          |
+| bnf                   | any string            | bnf   | comprehensive list |
 
-[cl-string-generator]: https://github.com/pokepay/cl-string-generator
-[cl-gimei]: https://github.com/cxxxr/cl-gimei
+If you want bnf parser generator, the projects below may what you want.
+
+* [cl-abnf]: ABNF Parser Generator, per RFC2234.
+* [cl-bnf]: A simple BNF parser.
 
 ## Usage
 
@@ -42,3 +47,12 @@ SBCL
 
 ## Installation
 
+<!-- Links -->
+
+[cl-string-generator]: https://github.com/pokepay/cl-string-generator
+[cl-gimei]: https://github.com/cxxxr/cl-gimei
+[lorem-ipsum]:https://github.com/phoe/lorem-ipsum.git
+[chancery]:https://hg.stevelosh.com/chancery
+[cl-diceware]:https://github.com/billstclair/cl-diceware.git
+[cl-abnf]:https://github.com/dimitri/cl-abnf.git
+[cl-bnf]:https://github.com/diasbruno/cl-bnf.git
